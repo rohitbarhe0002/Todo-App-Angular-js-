@@ -49,6 +49,6 @@ export class AllTasksComponent {
   }
 
   search(searchTerm: any) {
-console.log("called",searchTerm)
+  console.log("called",searchTerm)
   }
 }

@@ -1,0 +1,63 @@
+import logo from './logo.svg';
+import './App.css';
+import axios from 'axios';
+import { useEffect, useState } from 'react';
+function App() {
+  const [todos, setTodos] = useState([]);
+const [currentPage,setCurrentPage] = useState(1);
+const dataPerPge = 5 ;
+const lastIndex = currentPage*dataPerPge;
+const firstIndex = lastIndex - dataPerPge;
+
+const records = todos.slice(firstIndex,lastIndex)
+const totaPages = Math.ceil(todos.length/dataPerPge);
+const numbers = [...Array(totaPages+1).keys()].slice(1);
+console.log(records)
+  const getData = async () => {
+    const { data } = await axios.get("https://jsonplaceholder.typicode.com/todos");
+    setTodos(data)
+  }
+  useEffect(() => {
+    getData()
+  }, [])
+  const gotToPage = (page) => {
+setCurrentPage(page)
+  }
+
+  const prevPage =  () => {
+currentPage !== firstIndex && setCurrentPage(currentPage-1)
+  }
+
+  const nextPage = () => {
+    currentPage !== lastIndex && setCurrentPage(currentPage+1)
+
+  }
+  return (
+    <div className="App">
+      {records.map((todo) =>
+        <>
+
+          <li>
+            {todo.title}
+
+
+          </li>
+
+          <li>{todo.userId}</li>
+       
+        </>
+      )}
+         <ul>
+            <li>
+              <a onClick={()=>prevPage()}>Prev</a>
+            </li>
+            {numbers.map((itm,i)=><a onClick={()=>gotToPage(itm)} style={{backgroundColor:currentPage===itm?"red":"blue"}}>{itm}</a>)}
+            <li>
+              <a onClick={()=>nextPage()}>Next</a>
+            </li>
+          </ul>
+    </div>
+  );
+}
+
+export default App;
